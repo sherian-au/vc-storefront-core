@@ -456,7 +456,7 @@ namespace VirtoCommerce.Storefront.Controllers
 
         [HttpGet("logout")]
         [AllowAnonymous]
-        public async Task<ActionResult> Logout()
+        public async Task<ActionResult>  Logout()
         {
             await _signInManager.SignOutAsync();
             return StoreFrontRedirect("~/");
