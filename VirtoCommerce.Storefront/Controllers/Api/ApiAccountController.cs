@@ -23,7 +23,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
 {
     [StorefrontApiRoute("account")]
     [ResponseCache(CacheProfileName = "None")]
-    public class ApiAccountController : StorefrontControllerBase
+    public partial class ApiAccountController : StorefrontControllerBase
     {
         private readonly IEventPublisher _publisher;
         private readonly UserManager<User> _userManager;

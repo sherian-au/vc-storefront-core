@@ -20,6 +20,7 @@ namespace VirtoCommerce.Storefront.Controllers.Api
     public partial class ApiAccountController
     {
         // POST: storefrontapi/account/user
+
         [HttpPost("wam-supplier-user")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult<UserActionIdentityResult>> RegisterWamSupplierUser([FromBody] OrganizationUserRegistration registration)
@@ -40,7 +41,21 @@ namespace VirtoCommerce.Storefront.Controllers.Api
                 return result;
             }
 
+            var foundEmail = await _userManager.FindByEmailAsync(registration.Email);
+            if (foundEmail != null)
+            {
+                result = UserActionIdentityResult
+                   .Failed(new IdentityError
+                    {
+                        Code = "DuplicateEmail",
+                        Description = "This email is already taken"
+                    });
+
+                return BadRequest(result);
+            }
+
             var organization = new Organization {Id = registration.OrganizationId};
+
             var authorizationResult = await _authorizationService.AuthorizeAsync(User, organization, CanEditOrganizationResourceAuthorizeRequirement.PolicyName);
 
             if (!authorizationResult.Succeeded)
